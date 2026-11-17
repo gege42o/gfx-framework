@@ -91,6 +91,22 @@ void Lab5::Update(float deltaTimeSeconds)
     // function uses the view matrix from the camera that you just
     // implemented, and the local projection matrix.
 
+    {
+        glm::mat4 modelMatrix = glm::mat4(1);
+        modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0.75f, -2));
+        modelMatrix = glm::rotate(modelMatrix, RADIANS(30.0f), glm::vec3(0, 0, 1));
+        modelMatrix = glm::scale(modelMatrix, glm::vec3(0.75f, 1.25f, 0.75f));
+        RenderMesh(meshes["box"], shaders["VertexNormal"], modelMatrix);
+    }
+
+    {
+        glm::mat4 modelMatrix = glm::mat4(1);
+        modelMatrix = glm::translate(modelMatrix, glm::vec3(2.5f, 1.25f, -2));
+        modelMatrix = glm::rotate(modelMatrix, RADIANS(75.0f), glm::vec3(1, 1, 0));
+        modelMatrix = glm::scale(modelMatrix, glm::vec3(0.5f));
+        RenderMesh(meshes["box"], shaders["Simple"], modelMatrix);
+    }
+
     // Render the camera target. This is useful for understanding where
     // the rotation point is, when moving in third-person camera mode.
     if (renderCameraTarget)
@@ -138,33 +154,27 @@ void Lab5::OnInputUpdate(float deltaTime, int mods)
         float cameraSpeed = 2.0f;
 
         if (window->KeyHold(GLFW_KEY_W)) {
-            // TODO(student): Translate the camera forward
-
+            camera->TranslateForward(cameraSpeed * deltaTime);
         }
 
         if (window->KeyHold(GLFW_KEY_A)) {
-            // TODO(student): Translate the camera to the left
-
+            camera->TranslateRight(-cameraSpeed * deltaTime);
         }
 
         if (window->KeyHold(GLFW_KEY_S)) {
-            // TODO(student): Translate the camera backward
-
+            camera->TranslateForward(-cameraSpeed * deltaTime);
         }
 
         if (window->KeyHold(GLFW_KEY_D)) {
-            // TODO(student): Translate the camera to the right
-
+            camera->TranslateRight(cameraSpeed * deltaTime);
         }
 
         if (window->KeyHold(GLFW_KEY_Q)) {
-            // TODO(student): Translate the camera downward
-
+            camera->TranslateUpward(-cameraSpeed * deltaTime);
         }
 
         if (window->KeyHold(GLFW_KEY_E)) {
-            // TODO(student): Translate the camera upward
-
+            camera->TranslateUpward(cameraSpeed * deltaTime);
         }
     }
 
@@ -183,7 +193,21 @@ void Lab5::OnKeyPress(int key, int mods)
     {
         renderCameraTarget = !renderCameraTarget;
     }
-    // TODO(student): Switch projections
+    if (key == GLFW_KEY_O)
+    {
+        const float halfHeight = 5.0f;
+        const float halfWidth = halfHeight * window->props.aspectRatio;
+        projectionMatrix = glm::ortho(-halfWidth, halfWidth,
+                                      -halfHeight, halfHeight,
+                                      0.01f, 2000.0f);
+    }
+
+    if (key == GLFW_KEY_P)
+    {
+        projectionMatrix = glm::perspective(RADIANS(60.0f),
+                                            window->props.aspectRatio,
+                                            0.01f, 200.0f);
+    }
 
 }
 
@@ -205,17 +229,15 @@ void Lab5::OnMouseMove(int mouseX, int mouseY, int deltaX, int deltaY)
 
         if (window->GetSpecialKeyState() == 0) {
             renderCameraTarget = false;
-            // TODO(student): Rotate the camera in first-person mode around
-            // OX and OY using `deltaX` and `deltaY`. Use the sensitivity
-            // variables for setting up the rotation speed.
+            camera->RotateFirstPerson_OX(-deltaY * sensivityOX);
+            camera->RotateFirstPerson_OY(-deltaX * sensivityOY);
 
         }
 
         if (window->GetSpecialKeyState() & GLFW_MOD_CONTROL) {
             renderCameraTarget = true;
-            // TODO(student): Rotate the camera in third-person mode around
-            // OX and OY using `deltaX` and `deltaY`. Use the sensitivity
-            // variables for setting up the rotation speed.
+            camera->RotateThirdPerson_OX(-deltaY * sensivityOX);
+            camera->RotateThirdPerson_OY(-deltaX * sensivityOY);
 
         }
     }
@@ -236,6 +258,7 @@ void Lab5::OnMouseBtnRelease(int mouseX, int mouseY, int button, int mods)
 
 void Lab5::OnMouseScroll(int mouseX, int mouseY, int offsetX, int offsetY)
 {
+    
 }
 
 

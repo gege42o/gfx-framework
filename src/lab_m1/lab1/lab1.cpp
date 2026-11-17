@@ -6,6 +6,13 @@
 using namespace std;
 using namespace m1;
 
+#define RED 1.0f,0.0f,0.0f 
+#define BLUE 0.0f,1.0f,0.0f 
+#define GREEN 0.0f,0.0f,1.0f 
+const float COLORS[] = { RED, GREEN, BLUE };
+int offset;
+int id;
+int idx = 0;
 
 /*
  *  To find out more about `FrameStart`, `Update`, `FrameEnd`
@@ -37,6 +44,17 @@ void Lab1::Init()
 
     // TODO(student): Load some more meshes. The value of RESOURCE_PATH::MODELS
     // is actually a path on disk, go there and you will find more meshes.
+    {
+        Mesh* mesh2 = new Mesh("sphere");
+        mesh2->LoadMesh(PATH_JOIN(window->props.selfDir, RESOURCE_PATH::MODELS, "primitives"), "sphere.obj");
+        meshes[mesh2->GetMeshID()] = mesh2;
+    }
+
+    {
+        Mesh* mesh3 = new Mesh("teapot");
+        mesh3->LoadMesh(PATH_JOIN(window->props.selfDir, RESOURCE_PATH::MODELS, "primitives"), "teapot.obj");
+        meshes[mesh3->GetMeshID()] = mesh3;
+    }
 
 }
 
@@ -55,7 +73,7 @@ void Lab1::Update(float deltaTimeSeconds)
     // TODO(student): Generalize the arguments of `glClearColor`.
     // You can, for example, declare three variables in the class header,
     // that will store the color components (red, green, blue).
-    glClearColor(0, 0, 0, 1);
+    glClearColor(COLORS[offset],COLORS[offset+1],COLORS[offset+2],0);
 
     // Clears the color buffer (using the previously set color) and depth buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -73,6 +91,8 @@ void Lab1::Update(float deltaTimeSeconds)
     // was previously loaded. We do this using `RenderMesh`. Check the
     // signature of this function to see the meaning of its parameters.
     // You can draw the same mesh any number of times.
+
+    RenderMesh(meshes[meshes_cycle[idx]], glm::vec3(3, 0.5f, 1), glm::vec3(0.5f));    
 
 }
 
@@ -104,7 +124,13 @@ void Lab1::OnKeyPress(int key, int mods)
 {
     // Add key press event
     if (key == GLFW_KEY_F) {
-        // TODO(student): Change the values of the color components.
+        
+        id = (id + 1) % 3;
+        offset = id * 3;
+    }
+
+    if(key== GLFW_KEY_G){
+        idx = (idx+1) % 3;
 
     }
 

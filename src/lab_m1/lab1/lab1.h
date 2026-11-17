@@ -28,6 +28,7 @@ namespace m1
         void OnWindowResize(int width, int height) override;
 
         // TODO(student): Class variables go here
+        glm::string meshes_cycle[3]={"box","sphere","teapot"};
 
     };
 }   // namespace m1

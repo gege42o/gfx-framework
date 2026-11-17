@@ -39,6 +39,14 @@ namespace m1
         void OnWindowResize(int width, int height) override;
 
         void RenderScene();
+
+        float sunTranslateX;
+        float earthOrbitAngle;
+        float moonOrbitAngle;
+        float earthRotationAngle;
+        float moonRotationAngle;
+        float sunRotationAngle;
+
      protected:
         glm::mat4 modelMatrix;
         float translateX, translateY, translateZ;

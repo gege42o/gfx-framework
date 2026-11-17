@@ -42,7 +42,7 @@ void Lab2::Init()
     {
         vector<VertexFormat> vertices
         {
-            VertexFormat(glm::vec3(-1, -1,  1), glm::vec3(0, 1, 1), glm::vec3(0.2, 0.8, 0.6)),
+            VertexFormat(glm::vec3(-1, -1,  1), glm::vec3(0, 1, 1), glm::vec3(0.2, 0.8, 0.6), glm::vec3(255,0,0))
             // TODO(student): Complete the vertices data for the cube mesh
 
         };
@@ -51,6 +51,16 @@ void Lab2::Init()
         {
             0, 1, 2,    // indices for first triangle
             1, 3, 2,    // indices for second triangle
+            2, 3, 7,
+            2, 7, 6,
+            1, 7, 3,
+            1, 5, 7,
+            6, 7, 4,
+            7, 5, 4,
+            0, 4, 1,
+            1, 4, 5,
+            2, 6, 4,
+            0, 2, 4,
             // TODO(student): Complete indices data for the cube mesh
 
         };
