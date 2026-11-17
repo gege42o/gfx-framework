@@ -1,4 +1,8 @@
 build*
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
 /**/bin
 /**/.vs
 /**/obj
